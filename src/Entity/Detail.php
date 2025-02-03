@@ -109,6 +109,14 @@ class Detail
         return $this;
     }
 
+    public function getFullAddress(): ?string
+    {
+        return $this->address .
+            ', ' . $this->postal_code .
+            ' ' . $this->city .
+            ', ' . $this->country;
+    }
+
     public function getAddress(): ?string
     {
         return $this->address;
@@ -198,9 +206,11 @@ class Detail
         return $this->is_banned;
     }
 
-    public function setIsBanned(bool $is_banned): static
+    public function setIsBanned(): static
     {
-        $this->is_banned = $is_banned;
+        if ($this->strikes > 1) {
+            $this->is_banned = true;
+        }
 
         return $this;
     }
@@ -239,5 +249,11 @@ class Detail
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    // Indispensable
+    public function __toString()
+    {
+        return $this->company_name;
     }
 }
