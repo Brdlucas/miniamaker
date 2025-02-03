@@ -7,6 +7,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DetailRepository::class)]
+#[ORM\HasLifecycleCallbacks] // Gestion des created et updated
+
 class Detail
 {
     #[ORM\Id]
@@ -49,10 +51,34 @@ class Detail
     private ?User $pro = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $create_at = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $update_at = null;
+    private ?\DateTimeImmutable $updated_at = null;
+
+    /**
+     *  Constructeur pour gérer 
+     * les attibuts non-nullables par défaut
+     */
+    public function __construct()
+    {
+        $this->strikes = 0;
+        $this->country = "FR";
+        $this->is_banned = false;
+        $this->portfolio_check = false;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->created_at = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdateAtValue()
+    {
+        $this->updated_at = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -193,24 +219,24 @@ class Detail
 
     public function getCreateAt(): ?\DateTimeImmutable
     {
-        return $this->create_at;
+        return $this->created_at;
     }
 
-    public function setCreateAt(\DateTimeImmutable $create_at): static
+    public function setCreateAt(\DateTimeImmutable $created_at): static
     {
-        $this->create_at = $create_at;
+        $this->created_at = $created_at;
 
         return $this;
     }
 
     public function getUpdateAt(): ?\DateTimeImmutable
     {
-        return $this->update_at;
+        return $this->updated_at;
     }
 
-    public function setUpdateAt(\DateTimeImmutable $update_at): static
+    public function setUpdateAt(\DateTimeImmutable $updated_at): static
     {
-        $this->update_at = $update_at;
+        $this->updated_at = $updated_at;
 
         return $this;
     }
