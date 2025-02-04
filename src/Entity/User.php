@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use SebastianBergmann\Type\TrueType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -61,7 +62,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
-    #[ORM\OneToOne(mappedBy: 'pro', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'clients')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Subscription $subscription = null;
 
     /**
@@ -283,11 +285,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->subscription;
     }
 
-    public function setSubscription(Subscription $subscription): static
+    public function setSubscription(?Subscription $subscription): static
     {
-        // set the owning side of the relation if necessary
-        if ($subscription->getPro() !== $this) {
-            $subscription->setPro($this);
+        if ($subscription->getClients() !== $this) {
+            $subscription->addClient($this);
         }
 
         $this->subscription = $subscription;
