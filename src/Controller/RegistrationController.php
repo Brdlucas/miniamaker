@@ -22,7 +22,7 @@ class RegistrationController extends AbstractController
 {
     public function __construct(private EmailVerifier $emailVerifier) {}
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/inscription', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
 
@@ -41,7 +41,6 @@ class RegistrationController extends AbstractController
 
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -58,7 +57,7 @@ class RegistrationController extends AbstractController
 
             // do anything else you need here, like send an email
 
-            // return $security->login($user, 'form_login', 'main');
+            return $security->login($user, 'form_login', 'main');
         }
 
         return $this->render('registration/register.html.twig', [
