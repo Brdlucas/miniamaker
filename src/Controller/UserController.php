@@ -15,4 +15,12 @@ final class UserController extends AbstractController
             'controller_name' => 'UserController',
         ]);
     }
+
+    #[Route('/complete', name: 'app_complete', methods: ['GET', 'POST'])]
+    public function complete(): Response
+    {
+        //    Redirection avec flash message
+        $this->addFlash('success', 'Votre profil est complété');
+        return $this->render('app_profile');
+    }
 }
