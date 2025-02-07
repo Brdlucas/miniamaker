@@ -26,6 +26,11 @@ final class UserController extends AbstractController
             $this->addFlash('success', 'Votre profil à été mis à jour');
             return $this->redirectToRoute('app_profile');
         }
+
+        if ($this->getUser()->isVerified() == false) {
+            $this->addFlash('warning', 'Valider votre adresse e-mail');
+        }
+
         return $this->render('user/index.html.twig', [
             'userForm' => $form,
         ]);
