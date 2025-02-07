@@ -316,10 +316,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPathImage(): ?string
     {
-        if ($this->image = 'default.png' || $this->image == null) {
+        if ($this->image == 'default.png' || $this->image == null) {
             return '/medias/images/users/default.png';
         }
-        return '/medias/images/users' . $this->image;
+        return '/medias/images/users/' . $this->image;
     }
 
     public function setImage(string $image): static
