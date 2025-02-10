@@ -39,6 +39,8 @@ class UserFormType extends AbstractType
                 'mapped' => false,
                 'row_attr' => ['class' => 'mb-3'],
                 'toggle' => true,
+                'hidden_label' => 'Masquer',
+                'visible_label' => 'Afficher',
                 'label' => 'Saisisez votre mot de passe pour mettre à jour votre profil',
                 'label_attr' => ['class' => 'form-label'],
                 'attr' => [
