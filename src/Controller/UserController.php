@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Form\UserFormType;
-use App\service\UploaderService;
+use App\Service\UploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
