@@ -9,19 +9,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile', methods: ['GET', 'POST'])]
-    public function index(Request $request, EntityManagerInterface $em, UploaderService $us): Response
+    public function index(Request $request, EntityManagerInterface $em, UploaderService $us, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = $this->getUser();
         $form = $this->createForm(UserFormType::class,  $user);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if (true) { // TODO: Vérification de mot de passe
+            $password = $passwordHasher->isPasswordValid(
+                $user,
+                $form->get('password')->getData() // Récupère le password
+            );
+
+            if ($password) { // TODO: Vérification de mot de passe
                 $image = $form->get('image')->getData(); // Récupère l'image
                 if ($image != null) { // Si l'image est téléversée
                     $user->setImage( // Méthode de mutation de l'image
@@ -33,11 +40,12 @@ final class UserController extends AbstractController
                 }
                 $em->persist($user);
                 $em->flush();
+
+                // Redirection avec flash message
+                $this->addFlash('success', 'Votre profil à été mis à jour');
             }
+            $this->addFlash('error', 'une erreur est survenue');
 
-
-            // Redirection avec flash message
-            $this->addFlash('success', 'Votre profil à été mis à jour');
             return $this->redirectToRoute('app_profile');
         }
 
