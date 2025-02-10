@@ -24,3 +24,7 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 /migrations/*
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
