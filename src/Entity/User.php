@@ -6,7 +6,6 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use SebastianBergmann\Type\TrueType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -51,7 +50,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $fullname = null;
 
     #[ORM\Column]
-    private ?bool $is_minor = null;
+    private ?bool $is_major = null;
+
     #[ORM\Column]
     private ?bool $is_terms = null;
 
@@ -74,20 +74,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, LoginHistory>
      */
-    #[ORM\OneToMany(targetEntity: LoginHistory::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: LoginHistory::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $loginHistories;
 
     /**
-     *  Constructeur pour gérer 
-     * les attibuts non-nullables par défaut
+     * Constructeur pour gérer les 
+     * attributs non-nullables par défaut
      */
     public function __construct()
     {
-        $this->is_minor = false;
+        $this->is_major = false;
         $this->is_terms = false;
         $this->is_gpdr = false;
         $this->loginHistories = new ArrayCollection();
-        $this->image = 'default.png';
+        $this->image = "default.png";
     }
 
     #[ORM\PrePersist]
@@ -97,13 +97,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updated_at = new \DateTimeImmutable();
     }
 
-
     #[ORM\PreUpdate]
-    public function setUpdateAtValue()
+    public function setUpdatedAtValue()
     {
         $this->updated_at = new \DateTimeImmutable();
     }
-
 
     public function getId(): ?int
     {
@@ -228,14 +226,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isMinor(): ?bool
+    public function isMajor(): ?bool
     {
-        return $this->is_minor;
+        return $this->is_major;
     }
 
-    public function setIsMinor(bool $is_minor): static
+    public function setIsMajor(bool $is_major): static
     {
-        $this->is_minor = $is_minor;
+        $this->is_major = $is_major;
 
         return $this;
     }
@@ -298,8 +296,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->subscription;
     }
 
-    public function setSubscription(?Subscription $subscription): static
+    public function setSubscription(Subscription $subscription): static
     {
+        // set the owning side of the relation if necessary
         if ($subscription->getClients() !== $this) {
             $subscription->addClient($this);
         }
