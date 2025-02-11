@@ -74,13 +74,7 @@
 											<p class="mb-3">
 												{{ app.user.detail.landingPages.name ?? 'Aucune landing pages actuellement' }}
 											</p>
-											{% if app.user.detail is null %}
-												<a href="{{path('lp_add')}}" class="btn btn-primary">Créer une page</a>
-											{% else %}
-												{% if app.user.detail.landingPages|length == 0 %}
-													<a href="{{path('lp_add')}}" class="btn btn-primary">Créer une page</a>
-												{% endif %}
-											{% endif %}
+											<a href="{{path('lp_add')}}" class="btn btn-primary">Créer une page</a>
 										</div>
 									</div>
 								</div>
