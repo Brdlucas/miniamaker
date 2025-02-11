@@ -59,7 +59,16 @@
 												{{ app.user.subscription.name ?? 'Aucun abonnement actuellement' }}
 											</p>
 											{% if app.user.subscription is null %}
-												<a href="#" class="btn btn-primary">S'abonner</a>
+												<form action={{ path('app_subscription') }} method="post">
+													<input type="hidden" name="csrf_token" value="{{ csrf_token('app_subscribe')}}">
+													<div class="d-flex w-100 justify-content-between">
+														<select id="" class="btn btn-secondary w-100" name="plan">
+															<option value="990">990&euro; /an</option>
+															<option value="99">99&euro; /mois</option>
+														</select>
+														<button class="btn btn-primary" type="submit">S'abonner</button>
+													</div>
+												</form>
 											{% endif %}
 										</div>
 									</div>
