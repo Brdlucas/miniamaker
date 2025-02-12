@@ -19,16 +19,16 @@ class MessageRepository extends ServiceEntityRepository
     /**
      * @return Message[] Returns an array of Message objects
      */
-    public function findByDiscussion(int $discussionId): array
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.discussion = :val')
-            ->setParameter('val', $discussionId)
-            ->orderBy('m.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+    // public function findByDiscussion($discussionId): array
+    // {
+    //     return $this->createQueryBuilder('m')
+    //         ->andWhere('m.discussion = :val')
+    //         ->setParameter('val', $discussionId)
+    //         ->orderBy('m.createdAt', 'DESC')
+    //         ->getQuery()
+    //         ->getResult()
+    //     ;
+    // }
 
     //    public function findOneBySomeField($value): ?Message
     //    {
