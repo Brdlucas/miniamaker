@@ -6,6 +6,7 @@ use App\Repository\MessageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
@@ -31,6 +32,12 @@ class Message
     #[ORM\JoinColumn(nullable: false)]
     private ?Discussion $discussion = null;
 
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->created_at = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,7 +59,6 @@ class Message
     {
         return $this->content;
     }
-
     public function setContent(string $content): static
     {
         $this->content = $content;
