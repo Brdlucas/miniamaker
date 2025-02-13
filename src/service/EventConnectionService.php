@@ -33,7 +33,7 @@ class EventConnectionService implements EventSubscriberInterface
                 ->from('contact@miniamaker.com')
                 ->to($user->getEmail())
                 ->subject('Connexion réussie à votre compte')
-                ->html('<p>test</p>');
+                ->html('<p></p>');
 
             // Envoi de l'email
             $this->mailer->send($email);
