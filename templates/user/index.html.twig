@@ -52,17 +52,19 @@
 											Mon abonnement
 										</div>
 										<div class="card-body">
-											<p class="mb-3">
+											<p class="mb-3 text-center">
 												{% if app.user.subscription and app.user.subscription.isActive %}
 													Vous êtes abonné depuis
 													<br>
 													{{ app.user.subscription.createdAt|time_diff }}
 												{% else %}
-													Aucun abonnement actuellement
+													Vous n'avez aucun abonnement actuellement
 												{% endif %}
 											</p>
 
-											{% if app.user.subscription is null %}
+											{% if app.user.subscription and app.user.subscription.isActive %}
+												{{""}}
+											{% else %}
 												<form action={{ path('app_subscription') }} method="post">
 													<input type="hidden" name="csrf_token" value="{{ csrf_token('app_subscribe')}}">
 													<div class="d-flex w-100 justify-content-between">
