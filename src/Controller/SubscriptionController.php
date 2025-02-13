@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\PaymentService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,15 +47,30 @@ final class SubscriptionController extends AbstractController
     }
 
     #[Route('/subscription/success', name: 'app_subscription_success')]
-    public function success(Request $request): Response
+    public function success(Request $request, EntityManagerInterface $em): Response
     {
-        // Logique de traitement du succès
+
+        // Modification de la valeur isActive tout true pour l'abonnement
+        $user = $this->getUser();
+        $subscription = $user->getSubscription();
+
+        if ($subscription) {
+            $subscription->setIsActive(true);
+            $em->persist($subscription);
+            $em->flush();
+        }
+
+        // envoie une notification de réussite
+        $this->addFlash('success', 'Votre abonnement a bien été pris en compte');
+        // retour sur la page profile
         return $this->redirectToRoute('app_profile');
     }
 
     #[Route('/subscription/cancel', name: 'app_subscription_cancel')]
     public function cancel(): Response
     {
+        // envoie une notification d'erreur
+        $this->addFlash('warning', 'Votre abonnement n\'a pas bien été pris en compte');
         // Logique de traitement de l'annulation
         return $this->redirectToRoute('app_profile');
     }
