@@ -53,8 +53,15 @@
 										</div>
 										<div class="card-body">
 											<p class="mb-3">
-												{{ app.user.subscription.name ?? 'Aucun abonnement actuellement' }}
+												{% if app.user.subscription and app.user.subscription.isActive %}
+													Vous êtes abonné depuis
+													<br>
+													{{ app.user.subscription.createdAt|time_diff }}
+												{% else %}
+													Aucun abonnement actuellement
+												{% endif %}
 											</p>
+
 											{% if app.user.subscription is null %}
 												<form action={{ path('app_subscription') }} method="post">
 													<input type="hidden" name="csrf_token" value="{{ csrf_token('app_subscribe')}}">
