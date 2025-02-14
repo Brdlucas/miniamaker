@@ -7,12 +7,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
 
 final class PageController extends AbstractController
 {
-
+    public function __construct(
+        private LoginHistoryService $lhs,
+        private MailerInterface $mailer
+    ) {}
     #[Route('/', name: 'app_homepage', methods: ['GET'])]
-    public function index(Request $request, LoginHistoryService $lhs): Response
+    public function index(Request $request,): Response
     {
         if (!$this->getUser()) {
             return $this->render('page/lp.html.twig');
@@ -26,7 +31,16 @@ final class PageController extends AbstractController
 
             // Lancement du LoginHistoryService s'il vient de la connexion
             if ($requestArray['fromLogin'] === $requestArray['referer']) {
-                $lhs->addHistory($this->getUser(), $requestArray['userAgent'], $requestArray['ip']);
+                $this->lhs->addHistory($this->getUser(), $requestArray['userAgent'], $requestArray['ip']);
+
+                $email = (new Email())
+                    ->from('contact@miniamaker.com')
+                    ->to($this->getUser()->getEmail())
+                    ->subject('Connexion réussie à votre compte')
+                    ->html('<p></p>');
+
+                // Envoi de l'email
+                $this->mailer->send($email);
             }
 
             // Vérification du profil complet d'utilisateur
