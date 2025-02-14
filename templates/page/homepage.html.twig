@@ -6,7 +6,9 @@
 		<div class="container w-100 p-3 rounded border border-top-10  shadow text-dark d-flex justify-content-between">
 			<div class="w-100 h-100">
 				<h2>Vos messages</h2>
-				<p>vous avez 2 nouveaux messages</p>
+				<p>vous avez un total de
+					{{app.user.discussions.owner.messages|length}}
+					messages</p>
 				<a href={{path('app_message')}} class="btn btn-dark ">Voir les messages</a>
 			</div>
 		</div>
@@ -21,8 +23,8 @@
 						<h1 class="card-title pricing-card-title">99€<small class="text-body-secondary fw-light">/mo</small>
 						</h1>
 						<ul class="list-unstyled mt-3 mb-4">
-							<li>Payer par mois</li>
-							<li>plus convenable pour les Pros</li>
+							<li>Payer tout les mois</li>
+							<li>plus convenable pour les débutants</li>
 							<li>Annuler quand vous voulez</li>
 							<li>En savoir plus +</li>
 						</ul>
@@ -41,7 +43,7 @@
 						</h1>
 						<ul class="list-unstyled mt-3 mb-4">
 							<li>Payer a l'année</li>
-							<li>Plus convenable pour les agent</li>
+							<li>Plus convenable pour les Pro ou les Agents</li>
 							<li>Annuler quand vous voulez</li>
 							<li>En savoir plus +</li>
 
