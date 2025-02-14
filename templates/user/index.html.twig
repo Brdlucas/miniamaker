@@ -52,10 +52,19 @@
 											Mon abonnement
 										</div>
 										<div class="card-body">
-											<p class="mb-3">
-												{{ app.user.subscription.name ?? 'Aucun abonnement actuellement' }}
+											<p class="mb-3 text-center">
+												{% if app.user.subscription and app.user.subscription.isActive %}
+													Vous êtes abonné depuis
+													<br>
+													{{ app.user.subscription.createdAt|time_diff }}
+												{% else %}
+													Vous n'avez aucun abonnement actuellement
+												{% endif %}
 											</p>
-											{% if app.user.subscription is null %}
+
+											{% if app.user.subscription and app.user.subscription.isActive %}
+												{{""}}
+											{% else %}
 												<form action={{ path('app_subscription') }} method="post">
 													<input type="hidden" name="csrf_token" value="{{ csrf_token('app_subscribe')}}">
 													<div class="d-flex w-100 justify-content-between">
@@ -91,7 +100,7 @@
 									Mes derniers échanges
 								</div>
 								<div class="card-body">
-									LES DERNIERS MESSAGES
+									{{ include('components/messages-list.html.twig') }}
 								</div>
 							</div>
 						</div>
