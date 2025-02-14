@@ -13,12 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class DetailController extends AbstractController
 {
-    #[Route('/detail', name: 'app_detail', methods: ['GET', 'POST'])]
-
     public function __construct(
         private EntityManagerInterface $em,
         private DetailRepository $dr
     ) {}
+
+    #[Route('/detail', name: 'app_detail', methods: ['GET', 'POST'])]
+
 
     public function index(Request $request): Response
     {
