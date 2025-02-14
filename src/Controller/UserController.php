@@ -43,8 +43,9 @@ final class UserController extends AbstractController
 
                 // Redirection avec flash message
                 $this->addFlash('success', 'Votre profil à été mis à jour');
+            } else {
+                $this->addFlash('error', 'une erreur est survenue');
             }
-            $this->addFlash('error', 'une erreur est survenue');
 
             return $this->redirectToRoute('app_profile');
         }
