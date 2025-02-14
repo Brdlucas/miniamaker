@@ -37,7 +37,11 @@ final class PageController extends AbstractController
                     ->from('contact@miniamaker.com')
                     ->to($this->getUser()->getEmail())
                     ->subject('Connexion réussie à votre compte')
-                    ->html('<p></p>');
+                    ->html('<p>Bonjour,Nous vous informons qu\'une connexion à votre compte a été détectée
+                    <br><br>
+                    Si vous n\'êtes pas à l\'origine de cette connexion, veuillez immédiatement réinitialiser votre mot de passe.
+                    <br><br>
+                    Cordialement, L\'équipe MiniaMaker</p>');
 
                 // Envoi de l'email
                 $this->mailer->send($email);
